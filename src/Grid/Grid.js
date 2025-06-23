@@ -130,6 +130,7 @@ var layoutId = 0;
  * @param {String} [options.itemDraggingClass="muuri-item-dragging"]
  * @param {String} [options.itemReleasingClass="muuri-item-releasing"]
  * @param {String} [options.itemPlaceholderClass="muuri-item-placeholder"]
+ * @param {?function(Item, MouseEvent): (boolean|undefined)} [options.itemAnchorClick]
  */
 function Grid(element, options) {
   // Allow passing element as selector string
@@ -391,6 +392,11 @@ Grid.defaultOptions = {
   itemDraggingClass: 'muuri-item-dragging',
   itemReleasingClass: 'muuri-item-releasing',
   itemPlaceholderClass: 'muuri-item-placeholder',
+  /**
+   * Optional callback for anchor (<a>) item clicks. If set, called with (item, event) when a click on an <a> item would trigger navigation. If it returns false or calls event.preventDefault(), navigation is prevented.
+   * @type {?function(Item, MouseEvent): (boolean|undefined)}
+   */
+  itemAnchorClick: null,
 };
 
 /**

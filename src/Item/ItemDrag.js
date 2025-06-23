@@ -680,6 +680,8 @@ ItemDrag.prototype._forceResolveStartPredicate = function (event) {
  */
 ItemDrag.prototype._finishStartPredicate = function (event) {
   var element = this._item._element;
+  var grid = this._item.getGrid();
+  var settings = grid._settings;
 
   // Check if this is a click (very subjective heuristics).
   var isClick = Math.abs(event.deltaX) < 2 && Math.abs(event.deltaY) < 2 && event.deltaTime < 200;
@@ -689,7 +691,14 @@ ItemDrag.prototype._finishStartPredicate = function (event) {
 
   // If the gesture can be interpreted as click let's try to open the element's
   // href url (if it is an anchor element).
-  if (isClick) openAnchorHref(element);
+  if (isClick) {
+    if (typeof settings.itemAnchorClick === 'function' && element.tagName.toLowerCase() === 'a') {
+      var clickEvent = event.srcEvent;
+      var result = settings.itemAnchorClick(this._item, clickEvent);
+      if (result === false || (clickEvent && clickEvent.defaultPrevented)) return;
+    }
+    openAnchorHref(element);
+  }
 };
 
 /**
